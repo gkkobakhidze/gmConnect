@@ -1,4 +1,4 @@
-import {Web3Modal, Web3Button, useAccount } from '@web3modal/react';
+import {Web3Modal, Web3Button } from '@web3modal/react';
 
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -14,14 +14,12 @@ const config = {
 }
 
 export default function WalletConnectModal() {
-  const { account } = useAccount()
   
   return (
     <Stack 
     justifyContent="center"
     alignItems="center"
     spacing={2}>
-      {account.isConnected ? <Typography >{account.address}</Typography> : null}
       <Web3Button />
       <Web3Modal config={config} />
     </Stack>

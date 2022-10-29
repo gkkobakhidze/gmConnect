@@ -6,17 +6,24 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json';
-
+import svgTree from './svgTree';
 const GREETER_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 
 
-export class Treeco extends React.Component {
+export class Journey extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       greeting: "",
+      svgTree:"",
     }
+  }
+  componentDidMount() {
+    const _svg = svgTree()
+    this.setState({
+      svgTree:_svg,
+    })
   }
 
   async fetchGreeting() {
@@ -56,32 +63,17 @@ export class Treeco extends React.Component {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
   }
 
-  render() {
+ 
+  render(){
     return (
       <Stack
         justifyContent="center"
         alignItems="center"
         spacing={2}
       >
-        <Typography variant='h1'>Greeting</Typography>
-        <Typography variant='h2'>Current "Greet": {this.state.greeting} </Typography>
-        {<Button onClick={() => this.fetchGreeting()}>
-          Get Greeting
-        </Button>}
-        <input id={"new-greeting"} placeholder={"New Greeting"} />
-        <button onClick={() => {
-          const newGreeting = document.getElementById("new-greeting").value;
-          this.setGreeting(newGreeting);
-        }}>Update Greeting</button>
-        <WalletConnectModal />
+        <Typography variant='h1'>bom dia tree</Typography>
+          {this.state.svgTree}
       </Stack>
     )
   }
 }
-
-
-
-
-
-
-
