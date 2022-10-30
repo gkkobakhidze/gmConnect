@@ -9,9 +9,8 @@ import Typography from '@mui/material/Typography';
 import svgTree from './svgTree';
 import gmTree from '../artifacts/contracts/gmTree.sol/gmTree.json';
 import  SvgXml, {Svg, Circle} from 'react-native-svg';
-import test from './test';
 
-const GMTREE_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const GMTREE_ADDRESS = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1";
 
 
 
@@ -91,7 +90,7 @@ export class Journey extends React.Component {
         </Button>
         <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>{/* <test> */}
           <div class="example">
-            <Typography variant='h3'>bom dia tree</Typography>
+            <Typography variant='h1'>bom dia tree</Typography>
             <img alt="" src={this.displaySvg()} />
           </div>
         </Box>

@@ -6,6 +6,7 @@ import * as React from "react";
 
 import { Journey } from './treeco/Journey';
 import TreecoScan from './treeco/TreecoScan';
+import TreecoScanMe from './treeco/TreecoScanMe';
 
 
 
@@ -15,11 +16,9 @@ export default function App() {
 
       <Route path="" element= {<TreecoLayout/> } >
         <Route path="" element ={<Navigate to="/gm" replace/>} />
-        <Route path="/gm" element= {<TreecoScan/> } />
-        <Route path="/gm/:connection" element= {<TreecoScan/> } />
-
+        <Route path="/gm" element= {<TreecoScanMe/> } />
+        <Route path="/bd/:connection" element= {<TreecoScan/> } />
         <Route path="/journey" element= {<Journey/> } />
-        {/* <Route path="/tbd" element= {<Treeco/> } /> */}
       </Route>
     </Routes>
   )

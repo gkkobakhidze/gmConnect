@@ -4,17 +4,16 @@ import React from "react";
 // material
 import { Container } from '@material-ui/core';
 // components
-import { TreecoQR } from "./TreecoQR";
+import { Treeco } from "./Treeco";
 
 
 // ----------------------------------------------------------------------
 
 
-export default function TreecoScan() {
-  let connection = useParams();  
+export default function TreecoScanMe() {
   return (
     <Container maxWidth="xl">
-      <TreecoQR connection = {connection}/>
+      <Treeco/>
     </Container>
   );
 }

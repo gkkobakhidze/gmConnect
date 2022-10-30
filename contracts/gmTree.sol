@@ -39,10 +39,10 @@ contract gmTree is ERC721Pausable, Ownable {
 
         setConnectionsColors(
             [
-            "#F00505","#DFD516","#2F9104","#0D2DF8","#F711CD"
+            "#264653","#2a9d8f","#e9c46a","#f4a261","#e76f51"
             ]
         );
-        // _pause();
+        _pause();
     }
 
     function pause() public onlyOwner whenNotPaused {
@@ -74,11 +74,13 @@ contract gmTree is ERC721Pausable, Ownable {
         return _nextTokenId.current() - 1;
     }
     function getTree() public{
+        _unpause();
         require(tokenOf[msg.sender]==0, "Already has a tree");
         uint256 tokenId = _nextTokenId.current();
         tokenOf[msg.sender]=tokenId;
         _safeMint(msg.sender,tokenId);
         _nextTokenId.increment();
+        _pause();
     }
 
     function getTokenOf(address adr) public view returns (uint256){
@@ -124,8 +126,8 @@ contract gmTree is ERC721Pausable, Ownable {
     }
     
     function getYCoors(uint16 connectionNumber) public pure returns (uint16) {
-        if (connectionNumber < 1) {
-           uint16 yCoor = 1;
+        if (connectionNumber <= 1) {
+           uint16 yCoor = 20;
            return yCoor;
         }
         uint16 level = levelOf(connectionNumber);
@@ -133,28 +135,27 @@ contract gmTree is ERC721Pausable, Ownable {
         //scaled up to 1e18 and added 2PI to be within 2PI-4PI recommended range for using the Trig library
         uint256 angle = (((connectionNumber-kMin+1)*Trigonometry.PI)/((2**(level-1))-(2**(level-2))+1))+2*Trigonometry.PI;
         uint256 sineScaledDown = uint256(Trigonometry.sin(angle)/1e18);
-        uint16 yCoor= uint16(level - 1 + sineScaledDown);   
+        uint16 yCoor= uint16((level - 1 + sineScaledDown)*20);   
         return yCoor;
     }
 
 
     function getXCoors(uint16 connectionNumber) public pure returns (uint16) {
         uint16 xCoor;
-        if (connectionNumber <2) {
-            xCoor = 9;
+        if (connectionNumber <=2) {
+            xCoor = 180;
             return xCoor;
         }
 
         uint16 level = levelOf(connectionNumber);
-
         
         uint8 isEven = uint8(connectionNumber%2);
         if (isEven ==0){
-            xCoor = uint16(9+level/2);
+            xCoor = uint16(180+20*level);
             return xCoor;
         }
         if (isEven ==1){
-            xCoor = uint16(9-level/2);
+            xCoor = uint16(180-20*level);
             return xCoor;
         }
     }
@@ -165,12 +166,10 @@ contract gmTree is ERC721Pausable, Ownable {
         return
             string(
                 abi.encodePacked(
-                    '<line stroke="silver" x1="9" y1="0" x2="9" y2="9"/>',
-                     '<circle stroke="',
-                    connectionColor[color%5],
-                    '" cx="9" cy="4" r="0.4"/><circle stroke="',
+                    '<line stroke="silver" x1="180" y1="0" x2="180" y2="120"/>',
+                     '<circle fill="',
                     connectionColor[color%3],
-                    '" cx="9" cy="8" r="0.5"/>'
+                    '" cx="180" cy="120" r="24"/>'
                 )
             );
     }
@@ -187,13 +186,13 @@ contract gmTree is ERC721Pausable, Ownable {
                     Strings.toString(x2),
                     '" y2="',
                     Strings.toString(y2),
-                    '" /> <circle stroke="',
+                    '" /> <circle fill="',
                     connectionColor[color%5],
                     '" cx="',
                     Strings.toString(x2),
                     '" cy="',
                     Strings.toString(y2),
-                    '" r=".25"/>'
+                    '" r="12"/>'
                 )
             );
     }
@@ -207,10 +206,9 @@ contract gmTree is ERC721Pausable, Ownable {
                 uint16 x2= getXCoors(i+1);
                 uint16 y1= getYCoors(i);
                 uint16 y2= getYCoors(i+1);
-                
-                uint16 connectionColor = getNumberOfConnections(connections[i]);
 
-                string memory branch = drawBranch(x1,x2,y1,y2,connectionColor);
+                uint16 collectionsColor=getNumberOfConnections(connections[i]);
+                string memory branch = drawBranch(x1,x2,y1,y2,color);
 
                 treeBranches=abi.encodePacked(treeBranches,branch);
             }
@@ -234,7 +232,7 @@ contract gmTree is ERC721Pausable, Ownable {
         return
             string(
                 abi.encodePacked(
-                    '<svg width="100%" height="100%" viewBox="0 0 18 15" xmlns="http://www.w3.org/2000/svg">',
+                    '<svg width="100%" height="100%" viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg">',
                     svg,
                     '</svg>'
                 )

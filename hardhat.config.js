@@ -29,6 +29,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
+  solidity: "0.8.17",
   defaultNetwork: "hardhat",
   paths: {
     artifacts: "./src/artifacts",
@@ -42,7 +43,4 @@ module.exports = {
       accounts: [GOERLI_PRIVATE_KEY]
     }
   },
-  solidity: "0.8.17",
-  networks: {
-  }
 };
