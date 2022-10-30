@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import gmTree from '../artifacts/contracts/gmTree.sol/gmTree.json';
 
-const GMTREE_ADDRESS = "0x6e4517eB8E2077eA984570ccA0ddF22f06973E1D";
+const GMTREE_ADDRESS = "0x0f25D96D2d4444CF1feF83FC40042E1Ad975B64d";
 
 
 
