@@ -10,7 +10,7 @@ import svgTree from './svgTree';
 import gmTree from '../artifacts/contracts/gmTree.sol/gmTree.json';
 import  SvgXml, {Svg, Circle} from 'react-native-svg';
 
-const GMTREE_ADDRESS = "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1";
+const GMTREE_ADDRESS = "0x6e4517eB8E2077eA984570ccA0ddF22f06973E1D";
 
 
 
