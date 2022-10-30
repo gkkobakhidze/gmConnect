@@ -1,39 +1,28 @@
 import './App.css';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import TreecoLayout from './treeco/TreecoLayout';
 
 import * as React from "react";
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 
-import { Treeco } from './contractInteractions/Treeco';
-
+import { Journey } from './treeco/Journey';
+import TreecoScan from './treeco/TreecoScan';
 
 
 
-export class App extends React.Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-        greeting: "",
-      }
-  }
+export default function App() {
+  return (
+    <Routes>
 
-  buttonClick = () => {
-    console.log("yes")
-  }
+      <Route path="" element= {<TreecoLayout/> } >
+        <Route path="" element ={<Navigate to="/gm" replace/>} />
+        <Route path="/gm" element= {<TreecoScan/> } />
+        <Route path="/gm/:connection" element= {<TreecoScan/> } />
 
-
-
-  render() {
-    return (
-      <Stack>
-
-        <Button onClick={() => this.buttonClick()}>
-          Click me
-        </Button>
-        <Treeco/>
-      </Stack>
-    )
-  }
+        <Route path="/journey" element= {<Journey/> } />
+        {/* <Route path="/tbd" element= {<Treeco/> } /> */}
+      </Route>
+    </Routes>
+  )
 }
 
 
