@@ -1,6 +1,6 @@
 
 import WalletConnectModal from './walletConnect/walletConnectModal';
-import {useAccount } from '@web3modal/react';
+import { useAccount } from '@web3modal/react';
 import QRCode from "react-qr-code";
 
 import * as React from "react";
@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import gmTree from '../artifacts/contracts/gmTree.sol/gmTree.json';
 
-const GMTREE_ADDRESS = "0x0f25D96D2d4444CF1feF83FC40042E1Ad975B64d";
+const GMTREE_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 
 
@@ -19,7 +19,7 @@ export class TreecoQR extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      connection:props.connection.connection,
+      connection: props.connection.connection,
     }
   }
 
@@ -43,11 +43,10 @@ export class TreecoQR extends React.Component {
       await transaction.wait();
     }
   }
-  
+
 
   render() {
-    if (this.state.connection)
-    {
+    if (this.state.connection) {
       this.makeConnection()
     }
     return (

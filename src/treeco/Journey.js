@@ -8,9 +8,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import svgTree from './svgTree';
 import gmTree from '../artifacts/contracts/gmTree.sol/gmTree.json';
-import  SvgXml, {Svg, Circle} from 'react-native-svg';
+import SvgXml, { Svg, Circle } from 'react-native-svg';
 
-const GMTREE_ADDRESS = "0x0f25D96D2d4444CF1feF83FC40042E1Ad975B64d";
+const GMTREE_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 
 
@@ -19,9 +19,9 @@ export class Journey extends React.Component {
     super(props);
     this.state = {
       greeting: "",
-      address:"0",
-      svgTree:"",
-          
+      address: "0",
+      svgTree: "",
+
     }
   }
   async componentDidMount() {
@@ -54,7 +54,7 @@ export class Journey extends React.Component {
         const tokenId = await contract.getTokenOf(_address[0]);
         const _svg = await contract.tokenURI(tokenId);
         this.setState({
-          svgTree:_svg,
+          svgTree: _svg,
         })
       } catch (e) {
         console.log("Err: ", e)
@@ -68,23 +68,23 @@ export class Journey extends React.Component {
 
 
   displaySvg = () => {
-    if (this.state.svgTree){
+    if (this.state.svgTree) {
       const dataURI = this.state.svgTree;
       const json = String(Buffer.from(dataURI.substring(29), "base64"));
       const result = JSON.parse(json);
       console.log(this.state.svgTree)
       console.log(result['image'])
-      return(result['image'])
+      return (result['image'])
     }
   }
 
-  render(){
+  render() {
     return (
       <Stack
         justifyContent="center"
         alignItems="center"
         spacing={2}
-      >        
+      >
         <Button onClick={() => this.getTree()}>
           Get a Tree
         </Button>
