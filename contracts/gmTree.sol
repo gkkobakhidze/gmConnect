@@ -161,7 +161,7 @@ contract gmTree is ERC721Pausable, Ownable {
             xCoor = uint16(180 - 20 * level);
             return xCoor;
         } */
-        uint256[] xCoorArr;
+        uint16[] memory xCoorArr;
 
         for (uint16 i = 1; i <= connectionNumber; i++) {
             if (i <= 2) {
@@ -172,12 +172,12 @@ contract gmTree is ERC721Pausable, Ownable {
                 uint16 kMin = uint16((2**(lvl - 2)) + 1);
                 /* xCoor[i] = i; */
                 uint256 angle = (((i - kMin + 1) * Trigonometry.PI) /
-                    ((2**(level - 1)) - (2**(level - 2)) + 1)) +
+                    ((2**(lvl - 1)) - (2**(lvl - 2)) + 1)) +
                     2 *
                     Trigonometry.PI;
                 uint256 cosScaledDown = uint256(Trigonometry.cos(angle) / 1e18);
 
-                xCoorArr[i - 1] = xCoorArr[((i - 1) / 2)] + 20 * cosScaledDown;
+                xCoorArr[i - 1] = xCoorArr[((i - 1) / 2)] + uint16(20 * cosScaledDown);
             }
             /* xCoor[i] = num + i + kMin */
         }
