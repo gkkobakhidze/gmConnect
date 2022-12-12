@@ -130,8 +130,7 @@ contract gmTree is ERC721Pausable, Ownable {
 
     function getYCoors(uint16 connectionNumber) public pure returns (uint16) {
         if (connectionNumber <= 1) {
-            uint16 yCoor = 20;
-            return yCoor;
+            return connectionNumber*20;
         }
         uint16 level = levelOf(connectionNumber);
         uint16 kMin = uint16((2**(level - 2)) + 1);
@@ -144,45 +143,30 @@ contract gmTree is ERC721Pausable, Ownable {
     }
 
     function getXCoors(uint16 connectionNumber) public pure returns (uint16) {
-        /* uint16 xCoor;
-        if (connectionNumber <= 2) {
-            xCoor = 180;
-            return xCoor;
+
+        if (connectionNumber<=1) {
+            return 180;
         }
+        
+        uint16 lvl = levelOf(connectionNumber);
+        //@3 = 3
+        uint16 kMin = uint16((2**(lvl - 2)) + 1);
+        //@3 = 3
+        uint256 angle = (((connectionNumber - kMin + 1) * Trigonometry.PI) /
+            ((2**(lvl - 1)) - (2**(lvl - 2)) + 1)) +
+            //4 - 2 + 1 = 3 -> pi/3
+            2 * Trigonometry.PI;
 
-        uint16 level = levelOf(connectionNumber);
+        int256 cosScaledDown = int256(Trigonometry.cos(angle) / 1e18);
 
-        uint8 isEven = uint8(connectionNumber % 2);
-        if (isEven == 0) {
-            xCoor = uint16(180 + 20 * level);
-            return xCoor;
-        }
-        if (isEven == 1) {
-            xCoor = uint16(180 - 20 * level);
-            return xCoor;
-        } */
-        uint16[] memory xCoorArr;
+        int16 answer = int16(getXCoors((connectionNumber-1)/2))+int16((20 * cosScaledDown));
+        return uint16(answer);
 
-        for (uint16 i = 1; i <= connectionNumber; i++) {
-            if (i <= 2) {
-                xCoorArr[i - 1] = 180;
-            } else {
-                /* let num = Math.ceil(Math.log2(i) + 1); */
-                uint16 lvl = levelOf(i);
-                uint16 kMin = uint16((2**(lvl - 2)) + 1);
-                /* xCoor[i] = i; */
-                uint256 angle = (((i - kMin + 1) * Trigonometry.PI) /
-                    ((2**(lvl - 1)) - (2**(lvl - 2)) + 1)) +
-                    2 *
-                    Trigonometry.PI;
-                uint256 cosScaledDown = uint256(Trigonometry.cos(angle) / 1e18);
-
-                xCoorArr[i - 1] = xCoorArr[((i - 1) / 2)] + uint16(20 * cosScaledDown);
-            }
-            /* xCoor[i] = num + i + kMin */
-        }
-        /* } */
-        return xCoorArr[connectionNumber];
+        //at connection=0 => 180
+        //at connection=1 => 180
+        //at connection=2 => 180 + cos(pi/2)*20=180
+        //at connection=3 => getXCoors((3-1)/2)+cos(?)*20=getXCoors(1)+cos(?)*20=180+cos(?)*20
+        //at connection=4 => 180
     }
 
     function getTreeBase(uint16 color)
@@ -196,7 +180,7 @@ contract gmTree is ERC721Pausable, Ownable {
                     '<line stroke="silver" x1="180" y1="0" x2="180" y2="120"/>',
                     '<circle fill="',
                     connectionColor[color % 3],
-                    '" cx="180" cy="120" r="24"/>'
+                    '" cx="180" cy="120" r="18"/>'
                 )
             );
     }
@@ -225,7 +209,7 @@ contract gmTree is ERC721Pausable, Ownable {
                     Strings.toString(x2),
                     '" cy="',
                     Strings.toString(y2),
-                    '" r="12"/>'
+                    '" r="9"/>'
                 )
             );
     }
@@ -235,18 +219,18 @@ contract gmTree is ERC721Pausable, Ownable {
         view
         returns (bytes memory treeBranches)
     {
-        bytes memory treeBranches;
-        if (color > 1) {
+        
+        if (color >= 1) {
             for (uint16 i = 0; i < color; i++) {
                 uint16 x1 = getXCoors(i);
                 uint16 x2 = getXCoors(i + 1);
                 uint16 y1 = getYCoors(i);
                 uint16 y2 = getYCoors(i + 1);
 
-                uint16 collectionsColor = getNumberOfConnections(
+                uint16 connectionsColor = getNumberOfConnections(
                     connections[i]
                 );
-                string memory branch = drawBranch(x1, x2, y1, y2, color);
+                string memory branch = drawBranch(x1, x2, y1, y2, connectionsColor);
 
                 treeBranches = abi.encodePacked(treeBranches, branch);
             }
@@ -261,12 +245,12 @@ contract gmTree is ERC721Pausable, Ownable {
     {
         require(_exists(tokenId));
         address _adr = ownerOf(tokenId);
-        uint16 color = getNumberOfConnections(_adr);
+        uint16 nConnections = getNumberOfConnections(_adr);
         address[] memory connections = getConnections(_adr);
         svg = string(
             abi.encodePacked(
-                getTreeBase(color),
-                getTreeBranches(color, connections)
+                getTreeBase(nConnections),
+                getTreeBranches(nConnections, connections)
             )
         );
 
